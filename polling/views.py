@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from polling.models import Poll
 # Create your views here.
 
@@ -24,3 +24,4 @@ def detail_view(request, poll_id):
 
     context = {'poll': poll}
     return render(request, 'detail.html', context)
+
