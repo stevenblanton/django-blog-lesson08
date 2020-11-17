@@ -1,24 +1,21 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.template import loader
+# from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 from blogging.models import Post
 
 
-def detail_view(request, post_id):
-    published = Post.objects.all()
-    try:
-        post = published.get(pk=post_id)
-    except Post.DoesNotExist:
-        raise Http404
-    context = {'post': post}
-    return render(request, 'blogging/detail.html', context)
+class BlogDetailView(DetailView):
+    model = Post
+    template_name = 'blogging/detail.html'
 
 
-def list_view(request):
-    published = Post.objects.all()
-    print(published)
-    posts = published.order_by('-published_date')
-    context = {'posts': posts}
-    return render(request, 'blogging/list.html', context)
+class BlogListView(ListView):
+    model = Post
+    template_name = 'blogging/list.html'
+
+    def get_queryset(self):
+        queryset = Post.objects.order_by('-published_date')
+        return queryset
+
 
