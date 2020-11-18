@@ -15,7 +15,7 @@ class BlogListView(ListView):
     template_name = 'blogging/list.html'
 
     def get_queryset(self):
-        queryset = Post.objects.order_by('-published_date')
+        queryset = Post.objects.order_by('-published_date').exclude(published_date__exact=None)
         return queryset
 
 
