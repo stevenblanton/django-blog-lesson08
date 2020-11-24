@@ -1,11 +1,8 @@
-import datetime
-
 from django.test import TestCase
 from django.contrib.auth.models import User
+from blogging.models import Post, Category
+import datetime
 from django.utils.timezone import utc
-
-from blogging.models import Post
-from blogging.models import Category
 
 
 class PostTestCase(TestCase):
@@ -39,7 +36,7 @@ class FrontEndTestCase(TestCase):
         self.timedelta = datetime.timedelta(15)
         author = User.objects.get(pk=1)
         for count in range(1, 11):
-            post = Post(title=f"Post {count}Title",
+            post = Post(title="Post %d Title" % count,
                         text="foo",
                         author=author)
             if count < 6:
@@ -54,7 +51,7 @@ class FrontEndTestCase(TestCase):
         resp_text = resp.content.decode(resp.charset)
         self.assertTrue("Recent Posts" in resp_text)
         for count in range(1, 11):
-            title = f"Post {count} Title"
+            title = "Post %d Title" % count
             if count < 6:
                 self.assertContains(resp, title, count=1)
             else:
@@ -64,7 +61,7 @@ class FrontEndTestCase(TestCase):
         for count in range(1, 11):
             title = "Post %d Title" % count
             post = Post.objects.get(title=title)
-            resp = self.client.get(f'/posts/{post.pk}/')
+            resp = self.client.get('/posts/%d/' % post.pk)
             if count < 6:
                 self.assertEqual(resp.status_code, 200)
                 self.assertContains(resp, title)

@@ -6,16 +6,10 @@ from blogging.models import Post
 
 
 class BlogDetailView(DetailView):
-    model = Post
-    template_name = 'blogging/detail.html'
+    queryset = Post.objects.exclude(published_date__exact=None)
+    template_name = "blogging/detail.html"
 
 
 class BlogListView(ListView):
-    model = Post
-    template_name = 'blogging/list.html'
-
-    def get_queryset(self):
-        queryset = Post.objects.order_by('-published_date').exclude(published_date__exact=None)
-        return queryset
-
-
+    queryset = Post.objects.exclude(published_date__exact=None).order_by("-published_date")
+    template_name = "blogging/list.html"
